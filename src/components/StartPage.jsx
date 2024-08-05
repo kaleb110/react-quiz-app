@@ -1,7 +1,11 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
 import { quizOptions } from ".";
+import MyContext from "./Context";
 
-const StartPage = ({ handleStart, handleSelect }) => {
+const StartPage = () => {
+
+  const { handleStart, handleSelect } = useContext(MyContext)
   return (
     <div className="relative px-8 py-6 bg-white shadow-md rounded-lg max-w-4xl mx-auto mt-8">
       <h1 className="text-3xl font-bold text-gray-800 mb-6">

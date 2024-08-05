@@ -1,12 +1,16 @@
 /* eslint-disable react/prop-types */
+import { useContext } from "react";
 import CheckResult from "./CheckResult";
-const Result = ({
-  userAnswer,
-  handleRetryBtn,
-  handleCheckBtn,
-  isCheck,
-  filteredQuestion,
-}) => {
+import MyContext from "./Context";
+const Result = () => {
+  const {
+    userAnswer,
+    handleRetryBtn,
+    handleCheckBtn,
+    isCheck,
+    filteredQuestion,
+  } = useContext(MyContext);
+
   const right = userAnswer.filter((i) => i.result === true);
   const scorePercent = (right.length / filteredQuestion.length) * 100;
   return (
@@ -42,8 +46,6 @@ const Result = ({
       )}
       {isCheck && (
         <CheckResult
-          filteredQuestion={filteredQuestion}
-          handleRetryBtn={handleRetryBtn}
         />
       )}
     </div>

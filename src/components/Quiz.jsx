@@ -1,16 +1,15 @@
 /* eslint-disable react/prop-types */
 import Result from "./Result";
+import MyContext from "./Context";
+import { useContext } from "react";
 
-const Quiz = ({
-  handleCheckBtn,
-  handleRetryBtn,
-  handleClick,
-  handleSubmit,
-  userAnswer,
-  isCheck,
-  currentQuestionIndex,
-  filteredQuestion,
-}) => {
+const Quiz = () => {
+  const {
+    handleClick,
+    handleSubmit,
+    currentQuestionIndex,
+    filteredQuestion,
+  } = useContext(MyContext);
 
   return (
     <div className="text-center py-8 items-center flex flex-col gap-4">
@@ -50,13 +49,7 @@ const Quiz = ({
           </div>
         </div>
       ) : (
-        <Result
-          userAnswer={userAnswer}
-          handleRetryBtn={handleRetryBtn}
-          handleCheckBtn={handleCheckBtn}
-          isCheck={isCheck}
-          filteredQuestion={filteredQuestion}
-        />
+        <Result />
       )}
     </div>
   );

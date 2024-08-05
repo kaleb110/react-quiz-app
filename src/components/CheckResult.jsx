@@ -1,5 +1,9 @@
+import { useContext } from "react";
+import MyContext from "./Context";
+
 /* eslint-disable react/prop-types */
-const CheckResult = ({ filteredQuestion, handleRetryBtn }) => {
+const CheckResult = () => {
+  const { filteredQuestion, handleRetryBtn } = useContext(MyContext);
   return (
     <div className="w-full max-w-4xl mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
       <h1 className="text-4xl font-bold text-left mb-6 text-slate-700">

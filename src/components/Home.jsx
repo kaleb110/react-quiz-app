@@ -3,6 +3,7 @@ import { questionsData } from ".";
 import Quiz from "./Quiz";
 import StartPage from "./StartPage";
 import { Link } from "react-router-dom";
+import MyContext from "./Context";
 
 const Home = () => {
   const [userChoice, setUserChoice] = useState("");
@@ -16,8 +17,31 @@ const Home = () => {
     mode: "easy",
   });
   const [filteredQuestion, setfilteredQuestion] = useState(questionsData);
-  console.log(userChoice);
-  console.log(userAnswer);
+
+  const handleSelect = (key, e) => {
+    const selected = e.target.value;
+
+    setoptions((prevState) => ({
+      ...prevState,
+      [key]: selected,
+    }));
+    
+  };
+
+  const handleStart = () => {
+    setisStarted(true);
+
+    let filterData = questionsData.filter(
+      (data) =>
+        data.info.categorie === options.categorie &&
+        data.info.mode === options.mode
+    );
+    if (options.quantity === 5) filterData = filterData.slice(0, 5);
+    else if (options.quantity === 10) filterData = filterData.slice(0, 10);
+
+    setfilteredQuestion(filterData);
+  };
+
   const handleSubmit = (selected) => {
     setUserChoice(selected);
   };
@@ -43,8 +67,8 @@ const Home = () => {
     setUserChoice("");
     setUserAnswer([]);
     setcurrentQuestionIndex(0);
-    setisStarted(false)
-    setisCheck(false)
+    setisStarted(false);
+    setisCheck(false);
     setoptions({
       categorie: "javascript",
       quantity: 5,
@@ -56,35 +80,15 @@ const Home = () => {
     setisCheck(true);
   };
 
-  const handleStart = () => {
-    setisStarted(true);
+  
 
-    let filterData = questionsData.filter(
-      (data) =>
-        data.info.categorie === options.categorie &&
-        data.info.mode === options.mode
-    );
-    if (options.quantity === 5) filterData = filterData.slice(0, 5);
-    else if (options.quantity === 10) filterData = filterData.slice(0, 10);
+  
 
-    setfilteredQuestion(filterData);
-  };
-
-  const handleSelect = (key, e) => {
-    const selected = e.target.value;
-
-    setoptions((prevState) => ({
-      ...prevState,
-      [key]: selected,
-    }));
-  };
   return (
     <div>
       <header className="bg-blue-600 text-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <h1 className="font-bold text-3xl">
-            Trivia
-          </h1>
+          <h1 className="font-bold text-3xl">Trivia</h1>
           <Link to="/about" className="font-bold text-3xl  ">
             About
           </Link>
@@ -92,18 +96,24 @@ const Home = () => {
       </header>
 
       {isStarted ? (
-        <Quiz
-          handleClick={handleClick}
-          handleSubmit={handleSubmit}
-          handleRetryBtn={handleRetryBtn}
-          handleCheckBtn={handleCheckBtn}
-          currentQuestionIndex={currentQuestionIndex}
-          userAnswer={userAnswer}
-          isCheck={isCheck}
-          filteredQuestion={filteredQuestion}
-        />
+        <MyContext.Provider
+          value={{
+            handleClick,
+            handleSubmit,
+            handleRetryBtn,
+            handleCheckBtn,
+            currentQuestionIndex,
+            userAnswer,
+            isCheck,
+            filteredQuestion,
+          }}
+        >
+          <Quiz />
+        </MyContext.Provider>
       ) : (
-        <StartPage handleStart={handleStart} handleSelect={handleSelect} />
+        <MyContext.Provider value={{ handleStart, handleSelect }}>
+          <StartPage />
+        </MyContext.Provider>
       )}
     </div>
   );

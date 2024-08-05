@@ -1,27 +1,22 @@
-/* eslint-disable react/prop-types */
 import { useContext } from "react";
 import CheckResult from "./CheckResult";
-import MyContext from "./Context";
+import MyContext from "../contexts/Context";
 const Result = () => {
-  const {
-    userAnswer,
-    handleRetryBtn,
-    handleCheckBtn,
-    isCheck,
-    filteredQuestion,
-  } = useContext(MyContext);
+  const { handleRetryBtn, handleCheckBtn, state } = useContext(MyContext);
 
-  const right = userAnswer.filter((i) => i.result === true);
-  const scorePercent = (right.length / filteredQuestion.length) * 100;
+  // filters the correct answers
+  const right = state.userAnswer.filter((i) => i.result === true);
+  const scorePercent = (right.length / state.filteredQuestion.length) * 100;
   return (
     <div className="w-full max-w-4xl mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
-      {!isCheck && (
-        <>
+      {/* if check button is not clicked  render results page else render Checkresult page*/}
+      {!state.isCheck && (
+        <div className="w-full max-w-4xl mx-auto mt-8 bg-white p-6">
           <h1 className="text-4xl font-bold text-center mb-4 text-slate-700">
             Score: {scorePercent}%
           </h1>
           <p className="text-xl font-medium text-center mb-2 text-gray-600">
-            Total Questions: {filteredQuestion.length}
+            Total Questions: {state.filteredQuestion.length}
           </p>
           <p className="text-xl font-medium text-center mb-6 text-gray-600">
             Correct: {right.length}
@@ -42,12 +37,9 @@ const Result = () => {
               Check
             </button>
           </div>{" "}
-        </>
+        </div>
       )}
-      {isCheck && (
-        <CheckResult
-        />
-      )}
+      {state.isCheck && <CheckResult />}
     </div>
   );
 };

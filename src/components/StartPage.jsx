@@ -1,17 +1,15 @@
 /* eslint-disable react/prop-types */
 import { useContext } from "react";
 import { quizOptions } from ".";
-import MyContext from "./Context";
+import MyContext from "../contexts/Context";
 
 const StartPage = () => {
-
-  const { handleStart, handleSelect } = useContext(MyContext)
+  const { handleStart, handleSelect } = useContext(MyContext);
   return (
     <div className="relative px-8 py-6 bg-white shadow-md rounded-lg max-w-4xl mx-auto mt-8">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">
-        Quiz App
-      </h1>
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Quiz App</h1>
       <ul className="space-y-4">
+        {/* maps through question preference options  */}
         {quizOptions.map((quiz) => (
           <li key={quiz.title} className="flex flex-col gap-2">
             <label
@@ -38,7 +36,6 @@ const StartPage = () => {
                   </option>
                 ))}
               </select>
-
               <svg
                 className="absolute top-1/2 right-3 transform -translate-y-1/2 w-4 h-4 text-gray-500 pointer-events-none"
                 fill="none"
@@ -60,7 +57,7 @@ const StartPage = () => {
       <div className="mt-6">
         <button
           onClick={handleStart}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:bg-blue-600 transition-all"
+          className="bg-blue-500 text-xl text-white px-6 py-3 rounded-lg shadow-md hover:bg-blue-600 focus:bg-blue-600 transition-all"
         >
           Start
         </button>

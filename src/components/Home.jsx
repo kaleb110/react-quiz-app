@@ -1,111 +1,101 @@
-import { useState } from "react";
 import { questionsData } from ".";
 import Quiz from "./Quiz";
 import StartPage from "./StartPage";
 import { Link } from "react-router-dom";
-import MyContext from "./Context";
+import MyContext from "../contexts/Context";
+import { useReducer } from "react";
+import { reducer, initialValue } from "../reducers/Reducer";
 
 const Home = () => {
-  const [userChoice, setUserChoice] = useState("");
-  const [currentQuestionIndex, setcurrentQuestionIndex] = useState(0);
-  const [userAnswer, setUserAnswer] = useState([]);
-  const [isCheck, setisCheck] = useState(false);
-  const [isStarted, setisStarted] = useState(false);
-  const [options, setoptions] = useState({
-    categorie: "javascript",
-    quantity: 5,
-    mode: "easy",
-  });
-  const [filteredQuestion, setfilteredQuestion] = useState(questionsData);
+  // uses useReducer to manage state across the app
+  const [state, dispatch] = useReducer(reducer, initialValue);
 
+  // this function accepts the selected preferences
   const handleSelect = (key, e) => {
     const selected = e.target.value;
-
-    setoptions((prevState) => ({
-      ...prevState,
-      [key]: selected,
-    }));
-    
+    dispatch({ type: "setoptions", key: key, selected: selected });
   };
 
+  // this initiates quiz after selection of preferences
   const handleStart = () => {
-    setisStarted(true);
-
+    // sets the started value to true
+    dispatch({ type: "isStarted" });
+    // filters the questions based on users choices
     let filterData = questionsData.filter(
       (data) =>
-        data.info.categorie === options.categorie &&
-        data.info.mode === options.mode
+        data.info.categorie === state.options.categorie &&
+        data.info.mode === state.options.mode
     );
-    if (options.quantity === 5) filterData = filterData.slice(0, 5);
-    else if (options.quantity === 10) filterData = filterData.slice(0, 10);
-
-    setfilteredQuestion(filterData);
+    // slices number of questions either to 5 or 10
+    if (state.options.quantity === 5) filterData = filterData.slice(0, 5);
+    else if (state.options.quantity === 10)
+      filterData = filterData.slice(0, 10);
+    // updates the default question data
+    dispatch({ type: "filteredQuestion", filterData: filterData });
   };
 
-  const handleSubmit = (selected) => {
-    setUserChoice(selected);
+  // this function handles single choice click
+  const handleClick = (selected) => {
+    // updates user choice on single question
+    dispatch({ type: "userChoice", selected: selected });
   };
-  const handleClick = () => {
+
+  // handles next question button click
+  const handleSubmit = () => {
+    // checks user's choice with the answer
     let res = false;
-    if (userChoice === filteredQuestion[currentQuestionIndex].answer) {
+    if (
+      state.userChoice ===
+      state.filteredQuestion[state.currentQuestionIndex].answer
+    ) {
       res = true;
     }
-    setUserAnswer([
-      ...userAnswer,
-      {
-        id: currentQuestionIndex,
-        answer: userChoice,
+    // updates users answer
+    dispatch({
+      type: "userAnswer",
+      answer: {
+        id: state.currentQuestionIndex,
+        answer: state.userChoice,
         result: res,
       },
-    ]);
-
-    setUserChoice("");
-    setcurrentQuestionIndex((prevState) => prevState + 1);
-  };
-
-  const handleRetryBtn = () => {
-    setUserChoice("");
-    setUserAnswer([]);
-    setcurrentQuestionIndex(0);
-    setisStarted(false);
-    setisCheck(false);
-    setoptions({
-      categorie: "javascript",
-      quantity: 5,
-      mode: "easy",
     });
+
+    // resets the previous question choice
+    dispatch({ type: "resetChoice" });
+    // updates the question index to go to the next
+    dispatch({ type: "updatecurrentQuestionIndex" });
   };
 
+  // resets the quiz to take again
+  const handleRetryBtn = () => {
+    dispatch({ type: "reset" });
+  };
+
+  // handles checking the answers
   const handleCheckBtn = () => {
-    setisCheck(true);
+    dispatch({ type: "checkBtn" });
   };
-
-  
-
-  
 
   return (
     <div>
       <header className="bg-blue-600 text-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex justify-between items-center">
           <h1 className="font-bold text-3xl">Trivia</h1>
-          <Link to="/about" className="font-bold text-3xl  ">
+          <Link to="/about" className="font-bold text-xl">
             About
           </Link>
         </div>
       </header>
 
-      {isStarted ? (
+      {/* if start button is clicked render Quiz component else StartPage */}
+      {state.isStarted ? (
         <MyContext.Provider
           value={{
             handleClick,
             handleSubmit,
             handleRetryBtn,
             handleCheckBtn,
-            currentQuestionIndex,
-            userAnswer,
-            isCheck,
-            filteredQuestion,
+            state,
           }}
         >
           <Quiz />

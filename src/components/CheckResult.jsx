@@ -1,16 +1,16 @@
 import { useContext } from "react";
-import MyContext from "./Context";
+import MyContext from "../contexts/Context";
 
-/* eslint-disable react/prop-types */
 const CheckResult = () => {
-  const { filteredQuestion, handleRetryBtn } = useContext(MyContext);
+  const { handleRetryBtn, state } = useContext(MyContext);
   return (
-    <div className="w-full max-w-4xl mx-auto mt-8 bg-white shadow-lg rounded-lg p-6">
+    <div className="w-full max-w-4xl mx-auto mt-8 bg-white   p-6">
       <h1 className="text-4xl font-bold text-left mb-6 text-slate-700">
         Results
       </h1>
       <ul className="flex flex-col gap-4">
-        {filteredQuestion.map((question) => (
+        {/* maps through filteredQuestions and render the answers */}
+        {state.filteredQuestion.map((question) => (
           <div
             key={question.id}
             className="flex flex-col items-start p-4 bg-gray-100 rounded-md shadow-sm"

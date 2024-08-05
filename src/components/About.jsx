@@ -1,14 +1,12 @@
 import { Link } from "react-router-dom";
-
+import {Github, Linkedin, Reddit} from "../assets"
 const About = () => {
   return (
     <>
       <header className="bg-blue-600 text-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex justify-between items-center">
-          <Link to="/" className="font-bold text-3xl">
-            Quiz App
-          </Link>
-          <Link to="/about" className="font-bold text-3xl">
+          <a className="font-bold text-3xl">Trivia</a>
+          <Link to="/about" className="font-bold text-xl">
             About
           </Link>
         </div>
@@ -36,7 +34,7 @@ const About = () => {
         <h2 className="text-2xl font-semibold text-left mb-4 text-slate-700">
           Contact Us
         </h2>
-        <p className="text-lg text-gray-800">
+        <p className="text-lg text-gray-800 pb-6">
           If you have any questions or feedback, please feel free to reach out
           to us at{" "}
           <a href="mailto:kalisha123k@gmail.com" className="text-blue-500">
@@ -44,6 +42,27 @@ const About = () => {
           </a>
           .
         </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <Link
+              to="/"
+              className="w-32 bg-lime-500 hover:bg-lime-400 focus:bg-lime-400 text-white text-lg px-6 py-2 rounded-md shadow-md transition-all"
+            >
+              Back
+            </Link>
+          </div>
+          <div className="flex gap-2 items-center">
+            <a href="https://github.com/kaleb110">
+              <img src={Github} />
+            </a>
+            <a href="https://www.linkedin.com/in/kalebtsegaye1/">
+              <img src={Linkedin} />
+            </a>
+            <a href="https://www.reddit.com/user/Tall-Strike-6226/">
+              <img src={Reddit} />
+            </a>
+          </div>
+        </div>
       </div>
     </>
   );
